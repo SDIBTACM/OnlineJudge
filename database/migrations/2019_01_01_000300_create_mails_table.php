@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateMailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,22 +16,22 @@ class CreateUsersTable extends Migration
         $SQL_MODE = DB::select("select @@sql_mode sql_mode")[0]->sql_mode;
         DB::statement("set @@sql_mode = ''");
 
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('mails', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->timestamp('deleted_at')->default(0);
-            $table->string('username', 64);
-            $table->string('nickname', 64);
-            $table->string('password');
-            $table->string('email');
-            $table->timestamp('email_verified_at')->default(0);
-            $table->string('school')->default('');
+            $table->unsignedInteger('from_user_id')->default(0);
+            $table->unsignedInteger('to_user_id')->default(0);
+            $table->string('topic', 255)->default('');
             $table->tinyInteger('status')->default(0)
-                ->comment("-1: lock, 0: normal, 1: need verify by admin");
+                ->comment('0: new mail, 1: has read');
 
-            $table->unique(['email', 'deleted_at'], 'uq_email');
-            $table->unique(['username', 'deleted_at'],'uq_username');
+            $table->index('from_user_id', 'idx_from_user_id');
+            $table->index('to_user_id', 'idx_to_user_id');
+            $table->index('created_at', 'idx_time');
+            $table->index('status', 'idx_status');
+
         });
 
         DB::update('set @@sql_mode = ?' , ["$SQL_MODE"] );
@@ -44,6 +44,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('mails');
     }
 }

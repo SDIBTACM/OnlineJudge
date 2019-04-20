@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateDiscussPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,21 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+
         $SQL_MODE = DB::select("select @@sql_mode sql_mode")[0]->sql_mode;
         DB::statement("set @@sql_mode = ''");
 
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('discuss_posts', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->timestamp('deleted_at')->default(0);
-            $table->string('username', 64);
-            $table->string('nickname', 64);
-            $table->string('password');
-            $table->string('email');
-            $table->timestamp('email_verified_at')->default(0);
-            $table->string('school')->default('');
-            $table->tinyInteger('status')->default(0)
-                ->comment("-1: lock, 0: normal, 1: need verify by admin");
+            $table->unsignedInteger('owner_id');
+            $table->unsignedInteger('topic_id');
+            $table->tinyInteger('status')->default('0')
+                ->comment("r->l count, 0 = false. 0bit: is locked 1bit: is topping 2bit: is not show");
 
-            $table->unique(['email', 'deleted_at'], 'uq_email');
-            $table->unique(['username', 'deleted_at'],'uq_username');
+            $table->index('topic_id', 'idx_topic_id');
         });
 
         DB::update('set @@sql_mode = ?' , ["$SQL_MODE"] );
@@ -44,6 +40,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('discuss_posts');
     }
 }

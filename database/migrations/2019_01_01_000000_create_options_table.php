@@ -19,7 +19,7 @@ class CreateOptionsTable extends Migration
         Schema::create('options', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(0);
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
             $table->string('key', 64)->unique();
             $table->text('value')->comment("data in json");
@@ -28,8 +28,7 @@ class CreateOptionsTable extends Migration
         });
 
         DB::table('options')->insert(
-            array(
-
+            [
                 [
                     "key" => "system_status",
                     "value" => "[0]",
@@ -60,7 +59,7 @@ class CreateOptionsTable extends Migration
                     "comment" => "the ip list that can view page; if not empty, " .
                         "it will be checked first; You may deny yourself, be careful!"
                 ],
-            )
+            ]
         );
 
         DB::update('set @@sql_mode = ?' , ["$SQL_MODE"] );
