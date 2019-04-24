@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // clear  laravel/telescope data.
+        $schedule->command('telescope:prune --hours=36')->daily()->onOneServer();
     }
 
     /**
