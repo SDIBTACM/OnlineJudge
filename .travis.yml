@@ -2,9 +2,12 @@ language: php
 php:
   - 7.3
   - 7.2
-  - 7.1
+services:
+  - mysql
+  - redis-server
 before_script:
-  - cp .env.example .env
+  - cp .env.travis .env
   - composer install
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS homestead;'
   - php artisan key:generate
 script: vendor/bin/phpunit -c phpunit.xml
