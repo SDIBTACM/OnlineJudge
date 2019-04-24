@@ -10,4 +10,5 @@ before_script:
   - composer install
   - mysql -e 'CREATE DATABASE IF NOT EXISTS homestead;'
   - php artisan key:generate
+  - php artisan migration
 script: vendor/bin/phpunit -c phpunit.xml
