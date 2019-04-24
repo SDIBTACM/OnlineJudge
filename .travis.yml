@@ -8,7 +8,6 @@ services:
 before_script:
   - cp .env.travis .env
   - composer install
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS homestead;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS `homestead` COLLATE `utf8_unicode_ci`;'
   - php artisan key:generate
-  - php artisan migrate
 script: vendor/bin/phpunit -c phpunit.xml
