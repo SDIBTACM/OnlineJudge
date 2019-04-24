@@ -11,66 +11,98 @@ namespace App\Units\Tools;
 
 class Ip
 {
+
+    /**
+     * Checks if an IPv4 or IPv6 address is contained in the list of given IPs or subnets.
+     * @param $ip
+     * @param $subnets
+     * @return bool
+     */
+    static public function isIpInSubnets($ip, $subnets) {
+        if (! is_array($subnets)) {
+            return self::isIpInSubnet($ip, $subnets);
+        }
+
+        foreach ($subnets as $subnet) {
+            if (self::isIpInSubnet($ip, $subnet)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * CChecks if an IPv4 or IPv6 address is contained in the list of given IP or subnet.
+     * @param $ip
+     * @param $subnet
+     * @return bool
+     */
     static public function isIpInSubnet($ip, $subnet)
     {
 
-        if (! self::isIp($ip)) {
-            return false;
+        if (false != strpos($subnet, '/')) {
+            list($address, $netmask) = explode('/', $subnet, 2);
+        } else {
+            $address = $subnet;
+            $netmask = strpos($ip, ':') ? 128 : 32;
         }
 
-        if (substr_count($subnet, '/') < 1) {
-            return $ip == $subnet;
-        } else if (substr_count($subnet, '/') > 1) {
-            return false;
-        }
-
-        $subnetArray = explode('/', $subnet);
-
-        return self::isIpMatchSubnetWithMask($ip, $subnetArray[0], $subnetArray[1]);
+        return self::isIpMatchSubnetWithMask($ip, $address, $netmask);
     }
 
+    /**
+     * Check if the $ip is of IP
+     * @param string $ip
+     * @return bool
+     */
     static public function isIp($ip)
     {
         return self::isIpv4($ip) || self::isIpv6($ip);
     }
 
+    /**
+     * Check if the $ip is of IPv4 type
+     * @param string $ip
+     * @return bool
+     */
     static public function isIpv4($ip)
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
 
+    /**
+     * Check if the $ip is of IPv6 type
+     * @param string $ip
+     * @return bool
+     */
     static public function isIpv6($ip)
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }
 
-    static public function isIpMatchSubnetWithMask($ip, $subnet, $mask)
+    static private function isIpMatchSubnetWithMask($ip, $subnet, $mask)
     {
         if ($mask < 0 || $mask == null) {
             return false;
         }
 
-        if ($mask == 0) {
-            return true;
+        if (self::isIpv4($ip) && self::isIpv4($subnet)) {
+            return $mask <= 32 && self::isIpv4MatchSubnetWithMask($ip, $subnet, $mask);
         }
 
-        if (self::isIpv4($ip) && self::isIpv4($subnet) && $mask <= 32) {
-            return self::isIpv4MatchSubnetWithMask($ip, $subnet, $mask);
-        }
-
-        if (self::isIpv6($ip) && self::isIpv6($subnet) && $mask <= 128  ) {
-            return self::isIpv6MatchSubnetWithMask($ip, $subnet, $mask);
+        if (self::isIpv6($ip) && self::isIpv6($subnet)) {
+            return $mask <= 128 && self::isIpv6MatchSubnetWithMask($ip, $subnet, $mask);
         }
 
         return false;
     }
 
-    static public function isIpv4MatchSubnetWithMask($ip, $subnet, $mask)
+    static private function isIpv4MatchSubnetWithMask($ip, $subnet, $mask)
     {
         return substr_compare(sprintf('%032b', ip2long($ip)), sprintf('%032b', ip2long($subnet)), 0, $mask) == 0;
     }
 
-    static public function isIpv6MatchSubnetWithMask($ip, $subnet, $netmask)
+    static private function isIpv6MatchSubnetWithMask($ip, $subnet, $netmask)
     {
         $bytesAddr = unpack('n*', @inet_pton($ip));
         $bytesTest = unpack('n*', @inet_pton($subnet));
