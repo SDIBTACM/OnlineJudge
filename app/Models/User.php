@@ -9,17 +9,20 @@
 namespace App\Models;
 
 
+use App\Models\Ex\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password',
+        'username', 'nickname', 'email', 'password', 'school'
     ];
 
     /**
@@ -32,7 +35,7 @@ class User extends Model
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * 模型属性的类型
      *
      * @var array
      */
@@ -41,7 +44,7 @@ class User extends Model
     ];
 
     /**
-     * 模型的默认属性值。
+     * 模型的默认属性值
      *
      * @var array
      */
