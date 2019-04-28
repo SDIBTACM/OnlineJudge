@@ -51,4 +51,12 @@ class User extends Model
     protected $attributes = [
         'nickname' => ''
     ];
+
+    public function loginLog($count = 50) {
+        return $this->hasMany('App\Model\LoginLog');
+    }
+
+    public function group() {
+        return $this->belongsToMany('App\Model\group', 'user_groups');
+    }
 }

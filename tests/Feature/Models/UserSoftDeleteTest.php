@@ -10,10 +10,10 @@ namespace Tests\Feature\Models;
 
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserSoftDeleteTest extends TestCase
+
+
+class UserSoftDeleteTest extends ModelTestCase
 {
     use RefreshDatabase;
 
@@ -46,6 +46,10 @@ class UserSoftDeleteTest extends TestCase
         $this->assertSame(4, User::withTrashed()->where('nickname', "TS")->count());
         $this->assertSame(0, User::onlyTrashed()->where('nickname', "TS")->count());
         $this->assertSame(4, User::where('nickname', "TS")->count());
+
+        foreach ($userIds as $userId) {
+            $this->hardDelete($userId);
+        }
 
     }
 
