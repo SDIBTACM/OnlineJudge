@@ -15,7 +15,6 @@ use App\Models\User;
 
 class UserSoftDeleteTest extends ModelTestCase
 {
-    use RefreshDatabase;
 
     public function testAll() {
 

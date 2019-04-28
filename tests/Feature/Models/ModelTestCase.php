@@ -7,7 +7,9 @@
  */
 
 namespace Tests\Feature\Models;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ModelTestCase extends TestCase
 {
