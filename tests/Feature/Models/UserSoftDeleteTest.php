@@ -12,7 +12,6 @@ namespace Tests\Feature\Models;
 use App\Models\User;
 
 
-
 class UserSoftDeleteTest extends ModelTestCase
 {
 
@@ -81,7 +80,10 @@ class UserSoftDeleteTest extends ModelTestCase
 
     private function hardDelete($userId) {
         $user = User::find($userId);
-        $user->forceDelete();
+        if (! is_null($user)) {
+            $user->forceDelete();
+        }
+
     }
 
     private function restoreSoftDelete($userId) {
