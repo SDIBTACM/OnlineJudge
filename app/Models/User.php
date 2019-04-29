@@ -53,10 +53,19 @@ class User extends Model
     ];
 
     public function loginLog($count = 50) {
-        return $this->hasMany('App\Model\LoginLog');
+        return $this->hasMany('App\Models\LoginLog');
     }
 
     public function group() {
-        return $this->belongsToMany('App\Model\group', 'user_groups');
+        return $this->belongsToMany('App\Models\Group', 'user_groups');
     }
+
+    public function mailReceived() {
+        $this->hasMany('App\Models\Mail', 'to_user_id');
+    }
+
+    public function mailSent() {
+        $this->hasMany('App\Models\Mail', 'from_user_id');
+    }
+
 }
