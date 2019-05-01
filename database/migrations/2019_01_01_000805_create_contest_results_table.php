@@ -20,9 +20,9 @@ class CreateContestResultsTable extends Migration
             $table->bigIncrements('id');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->integer('contest_problem_id')->default(0);
-            $table->integer('user_id')->default(0);
-            $table->integer('contest_id')->default(0);
+            $table->unsignedBigInteger('contest_problem_id')->default(0);
+            $table->unsignedInteger('user_id')->default(0);
+            $table->unsignedInteger('contest_id')->default(0);
             $table->integer('submit_count')->default('0')->comment('value mean submit times');
             $table->dateTime('ac_at')->default(0);
 
