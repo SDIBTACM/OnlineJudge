@@ -3,7 +3,7 @@
  * It have many bugs
  * Created in dreaming.
  * User: Boxjan
- * Datetime: 2019-04-29 20:35
+ * Datetime: 2019-05-01 15:42
  */
 
 namespace App\Models;
@@ -11,7 +11,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MailContext extends Model
+class ContestResult extends Model
 {
-    protected $primaryKey = 'mail_id';
+
 }

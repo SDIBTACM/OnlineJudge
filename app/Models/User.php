@@ -57,15 +57,19 @@ class User extends Model
     }
 
     public function group() {
-        return $this->belongsToMany('App\Models\Group', 'user_groups');
+        return $this->belongsToMany('App\Models\Group', 'user_groups')->withTimestamps();
     }
 
     public function mailReceived() {
-        $this->hasMany('App\Models\Mail', 'to_user_id');
+        return $this->hasMany('App\Models\Mail', 'to_user_id');
     }
 
     public function mailSent() {
-        $this->hasMany('App\Models\Mail', 'from_user_id');
+        return $this->hasMany('App\Models\Mail', 'from_user_id');
+    }
+
+    public function solutions() {
+        return $this->hasMany('App\Models\Solution', 'owner_id');
     }
 
 }

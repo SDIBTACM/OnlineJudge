@@ -3,7 +3,7 @@
  * It have many bugs
  * Created in dreaming.
  * User: Boxjan
- * Datetime: 2019-04-27 17:29
+ * Datetime: 2019-05-01 13:07
  */
 
 namespace App\Models;
@@ -12,11 +12,11 @@ namespace App\Models;
 use App\Models\Ex\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class Group extends Model
+class News extends Model
 {
     use SoftDeletes;
 
-    public function user() {
-        return $this->belongsToMany('App\Models\User', 'user_groups')->withTimestamps();
+    public function context() {
+        return $this->hasOne('App\Models\NewsContext');
     }
 }
