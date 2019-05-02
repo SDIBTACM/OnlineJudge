@@ -22,14 +22,18 @@ class Contest extends Model
     }
 
     public function privileges() {
-        return $this->hasMany('App\Models\ContestPrivileges');
+        return $this->hasMany('App\Models\ContestPrivilege');
     }
 
-    public function problem() {
+    public function problemList() {
         return $this->hasMany('App\Models\ContestProblem')->orderBy('problem_order');
     }
 
     public function result() {
         return $this->hasMany('App\Models\ContestResult');
+    }
+
+    public function owner() {
+        return $this->belongsTo('App\Models\User', 'owner_id');
     }
 }

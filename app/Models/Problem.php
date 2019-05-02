@@ -27,4 +27,8 @@ class Problem extends Model
     public function solution() {
         return $this->hasMany('App\Models\Solution');
     }
+
+    public function owner() {
+        return $this->belongsTo('App\Models\User', 'owner_id');
+    }
 }

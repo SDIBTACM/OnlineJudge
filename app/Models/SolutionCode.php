@@ -15,4 +15,7 @@ class SolutionCode extends Model
 {
     protected $primaryKey = 'solution_id';
 
+    public function solution() {
+        return $this->belongsTo('App\Models\Solution');
+    }
 }

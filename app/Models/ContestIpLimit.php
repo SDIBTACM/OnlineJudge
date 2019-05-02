@@ -13,8 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContestIpLimit extends Model
 {
+    protected $primaryKey = 'contest_id';
+
     protected $attributes = [
-        'deny_ips' => '{}',
-        'allow_ips' => '{}'
+        'deny_ips' => '[]',
+        'allow_ips' => '[]'
     ];
 }

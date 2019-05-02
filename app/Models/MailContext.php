@@ -14,4 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class MailContext extends Model
 {
     protected $primaryKey = 'mail_id';
+
+    public function mail() {
+        return $this->belongsTo('App\Models\Mail');
+    }
 }

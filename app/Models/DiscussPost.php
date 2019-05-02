@@ -23,4 +23,8 @@ class DiscussPost extends Model
     public function context() {
         return $this->hasOne('App\Models\DiscussPostContext', 'discuss_post_id');
     }
+
+    public function user() {
+        return $this->belongsTo('App\Models\User', 'owner_id');
+    }
 }

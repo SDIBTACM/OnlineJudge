@@ -14,4 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class NewsContext extends Model
 {
     protected $primaryKey = 'news_id';
+
+    public function news() {
+        return $this->belongsTo('App\Models\News');
+    }
 }

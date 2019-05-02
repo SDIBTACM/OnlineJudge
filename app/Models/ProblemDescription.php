@@ -14,4 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class ProblemDescription extends Model
 {
     protected $primaryKey = 'problem_id';
+
+    public function problem() {
+        return $this->belongsTo('App\Models\Problem');
+    }
 }

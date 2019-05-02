@@ -19,4 +19,8 @@ class DiscussTopic extends Model
     public function posts() {
         return $this->hasMany('App\Models\DiscussPost', 'topic_id');
     }
+
+    public function user() {
+        return $this->belongsTo('App\Models\User', 'owner_id');
+    }
 }

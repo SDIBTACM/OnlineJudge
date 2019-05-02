@@ -20,4 +20,12 @@ class Mail extends Model
         return $this->hasOne('App\Models\MailContext');
     }
 
+    public function fromUser() {
+        return $this->belongsTo('App\Models\User', 'from_user_id');
+    }
+
+    public function toUser() {
+        return $this->belongsTo('App\Models\User', 'to_user_id');
+    }
+
 }
