@@ -43,6 +43,17 @@ $app->singleton(
 
 /*
 |--------------------------------------------------------------------------
+| Add Some Globals var to record something
+|--------------------------------------------------------------------------
+|
+|
+ */
+defined('APPLICATION_CREATED') or define('APPLICATION_CREATED', microtime(true));
+if( !isset($GLOBALS['QUERY_COUNT']) ) $GLOBALS['QUERY_COUNT'] = 0;
+
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |
