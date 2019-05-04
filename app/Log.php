@@ -13,6 +13,16 @@ class Log
 {
     /**
      * @param $message
+     * Log::debug("user: {}  ip: {}  balabala", $user, $ip)
+     * before record message, it will check APP_DEBUG status
+     */
+    public static function debug($message) {
+        if (env('APP_DEBUG', false) === true)
+            @self::saveLog($message, __FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param $message
      * Log::info("user: {}  ip: {}  balabala", $user, $ip)
      */
     public static function info($message) {
@@ -33,16 +43,6 @@ class Log
      */
     public static function error($message) {
         @self::saveLog($message, __FUNCTION__, func_get_args());
-    }
-
-    /**
-     * @param $message
-     * Log::debug("user: {}  ip: {}  balabala", $user, $ip)
-     * before record message, it will check APP_DEBUG status
-     */
-    public static function debug($message) {
-        if (env('APP_DEBUG', false) === true)
-            @self::saveLog($message, __FUNCTION__, func_get_args());
     }
 
     private static function dealBacktrace() {
