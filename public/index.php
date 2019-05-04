@@ -8,7 +8,7 @@
  */
 
 define('LARAVEL_START', microtime(true));
-$QUERY_COUNT = 0;
+if( !isset($GLOBALS['QUERY_COUNT']) ) $GLOBALS['QUERY_COUNT'] = 0;
 
 /*
 |--------------------------------------------------------------------------
