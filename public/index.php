@@ -7,7 +7,8 @@
  * @author   Taylor Otwell <taylor@laravel.com>
  */
 
-define('LARAVEL_START', microtime(true));
+defined('LARAVEL_START') or define('LARAVEL_START', microtime(true));
+
 if( !isset($GLOBALS['QUERY_COUNT']) ) $GLOBALS['QUERY_COUNT'] = 0;
 
 /*
