@@ -2,4 +2,4 @@
 
 @section('title', __('Gone'))
 @section('code', '410')
-@section('message',__('Gone'))
+@section('message',__($exception->getMessage() ?: 'Gone'))

@@ -10,17 +10,51 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// dev view
+//Route::get('views', function() {
+//    $user = App\User::first();
+//    return (new App\Mails\ResetPasswordMail($user, "test-token"));
+//});
 
-Route::get('/', function () {
-    return view('welcome');
+//normal
+Route::get('/', 'HomeController@index')->name('home');
+
+// Auth Route
+Route::namespace('Auth')->group(function (){
+    // Login
+    Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@login')->name('login');
+
+    // Logout
+    Route::get('logout', 'LoginController@logout')->name('logout');
+    Route::get('logout', 'LoginController@logout')->name('logout');
+
+    // Register
+    Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+    Route::post('register', 'RegisterController@register')->name('register');
+
+    // Reset password
+    Route::prefix('password/')->group(function() {
+        Route::get('reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+        Route::post('/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+        Route::get('reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+        Route::post('reset', 'ResetPasswordController@reset')->name('password.update');
+    });
+
+    // verity email
+    Route::prefix('email/')->group(function () {
+        Route::get('verify', 'VerificationController@show')->name('verification.notice');
+        Route::get('verify/{id}', 'VerificationController@verify')->name('verification.verify');
+        Route::get('resend', 'VerificationController@resend')->name('verification.resend');
+    });
+
 });
 
-Auth::routes();
+// Teacher
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Admin
 
-Route::get('/teapot', function () {
-    \App\Log::info('some one found a teapot');
-    abort(418, "I'm a teapot");
-})->name('teapot');
+
+//Other
+Route::get('/teapot', 'NoNeedToHaveController@teapot')->name('teapot');
 

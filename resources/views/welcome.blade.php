@@ -61,6 +61,15 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            
+            footer {
+                line-height: 0.5;
+                text-align: center;
+                font-size: .9em;
+                display: block;
+                justify-content: center;
+            }
+
         </style>
     </head>
     <body>
@@ -95,5 +104,6 @@
                 </div>
             </div>
         </div>
+        @include('layouts.component.footer')
     </body>
 </html>
