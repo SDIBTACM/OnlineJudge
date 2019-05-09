@@ -25,14 +25,12 @@ class LoginLogoutTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        print_r($user);
+        $this->assertDatabaseHas('users', $user->toArray());
 
-        $response = $this->from('/login')->post('/login', [
+        $this->from('/login')->post('/login', [
             'identification' => $user->username,
             'password' => 'password'
-        ]);
-
-
+        ])->assertRedirect('/');
 
         $this->assertAuthenticatedAs(AuthUser::find($user->id));
     }
@@ -43,6 +41,8 @@ class LoginLogoutTest extends TestCase
     public function testLoginByEmail()
     {
         $user = factory(User::class)->create();
+
+        $this->assertDatabaseHas('users', $user->toArray());
 
         $this->from('/login')->post('/login', [
             'identification' => $user->email,
