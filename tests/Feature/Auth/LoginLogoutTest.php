@@ -25,6 +25,8 @@ class LoginLogoutTest extends TestCase
     {
         $user = factory(User::class)->create();
 
+        print_r($user);
+
         $response = $this->from('/login')->post('/login', [
             'identification' => $user->username,
             'password' => 'password'
