@@ -15,7 +15,8 @@ class DiscussPostContext extends Model
 {
     protected $primaryKey = 'discuss_post_id';
 
-    public function post() {
+    public function post()
+    {
         return $this->belongsTo('App\Models\DiscussPost', 'discuss_post_id');
     }
 }

@@ -16,7 +16,8 @@ class Group extends Model
 {
     use SoftDeletes;
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsToMany('App\Models\User', 'user_groups')->withTimestamps();
     }
 }

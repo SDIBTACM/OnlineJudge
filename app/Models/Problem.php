@@ -16,19 +16,23 @@ class Problem extends Model
 {
     use SoftDeletes;
 
-    public function description() {
+    public function description()
+    {
         return $this->hasOne('App\Models\ProblemDescription');
     }
 
-    public function extraCode() {
+    public function extraCode()
+    {
         return $this->hasOne('App\Models\ProblemExtraCode');
     }
 
-    public function solution() {
+    public function solution()
+    {
         return $this->hasMany('App\Models\Solution');
     }
 
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo('App\Models\User', 'owner_id');
     }
 }

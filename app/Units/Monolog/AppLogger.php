@@ -14,7 +14,7 @@ class AppLogger
     /**
      * 自定义日志实例
      *
-     * @param  \Illuminate\Log\Logger  $logger
+     * @param \Illuminate\Log\Logger $logger
      * @return void
      */
     public function __invoke($logger)

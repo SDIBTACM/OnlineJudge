@@ -52,23 +52,28 @@ class User extends Model
         'nickname' => ''
     ];
 
-    public function loginLog($count = 50) {
+    public function loginLog($count = 50)
+    {
         return $this->hasMany('App\Models\LoginLog');
     }
 
-    public function groups() {
+    public function groups()
+    {
         return $this->belongsToMany('App\Models\Group', 'user_groups')->withTimestamps();
     }
 
-    public function mailReceived() {
+    public function mailReceived()
+    {
         return $this->hasMany('App\Models\Mail', 'to_user_id');
     }
 
-    public function mailSent() {
+    public function mailSent()
+    {
         return $this->hasMany('App\Models\Mail', 'from_user_id');
     }
 
-    public function solutions() {
+    public function solutions()
+    {
         return $this->hasMany('App\Models\Solution', 'owner_id');
     }
 

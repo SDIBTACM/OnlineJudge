@@ -16,11 +16,13 @@ class DiscussTopic extends Model
 {
     use SoftDeletes;
 
-    public function posts() {
+    public function posts()
+    {
         return $this->hasMany('App\Models\DiscussPost', 'topic_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('App\Models\User', 'owner_id');
     }
 }

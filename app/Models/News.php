@@ -16,7 +16,8 @@ class News extends Model
 {
     use SoftDeletes;
 
-    public function context() {
+    public function context()
+    {
         return $this->hasOne('App\Models\NewsContext');
     }
 }

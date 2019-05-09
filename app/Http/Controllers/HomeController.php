@@ -9,13 +9,17 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Http\Request;
+
 class HomeController extends Controller
 {
     /**
      * This is the index for and other
-     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index() {
+    public function index(Request $request)
+    {
         return view('welcome');
     }
 }

@@ -15,7 +15,8 @@ class MailContext extends Model
 {
     protected $primaryKey = 'mail_id';
 
-    public function mail() {
+    public function mail()
+    {
         return $this->belongsTo('App\Models\Mail');
     }
 }

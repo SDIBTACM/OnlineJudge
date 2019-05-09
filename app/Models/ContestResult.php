@@ -13,11 +13,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContestResult extends Model
 {
-	public function contest() {
-		return $this->belongsTo('App\Models\Contest');
-	}
+    public function contest()
+    {
+        return $this->belongsTo('App\Models\Contest');
+    }
 
-	public function problem() {
-	    return $this->hasOne('App\Models\ContestProblem');
+    public function problem()
+    {
+        return $this->hasOne('App\Models\ContestProblem');
     }
 }

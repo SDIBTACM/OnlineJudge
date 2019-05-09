@@ -13,11 +13,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContestPrivilege extends Model
 {
-    public function contest() {
-    	return $this->belongsTo('App\Models\Contest');
+    public function contest()
+    {
+        return $this->belongsTo('App\Models\Contest');
     }
 
-    public function user() {
-    	return $this->belongsTo('App\Models\User');
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
     }
 }

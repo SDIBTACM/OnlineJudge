@@ -16,11 +16,13 @@ class ContestRegister extends Model
 {
     use SoftDeletes;
 
-    public function contest() {
+    public function contest()
+    {
         return $this->belongsTo('App\Models\Contest');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('App\Models\User');
     }
 }

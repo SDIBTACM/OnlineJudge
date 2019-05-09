@@ -16,15 +16,18 @@ class Mail extends Model
 {
     use SoftDeletes;
 
-    public function context() {
+    public function context()
+    {
         return $this->hasOne('App\Models\MailContext');
     }
 
-    public function fromUser() {
+    public function fromUser()
+    {
         return $this->belongsTo('App\Models\User', 'from_user_id');
     }
 
-    public function toUser() {
+    public function toUser()
+    {
         return $this->belongsTo('App\Models\User', 'to_user_id');
     }
 

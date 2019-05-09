@@ -13,19 +13,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Solution extends Model
 {
-    public function code() {
+    public function code()
+    {
         return $this->hasOne('App\Models\SolutionCode');
     }
 
-    public function fullResult() {
+    public function fullResult()
+    {
         return $this->hasOne('App\Models\SolutionFullResult');
     }
 
-    public function problem() {
+    public function problem()
+    {
         return $this->belongsTo('App\Models\Problem');
     }
 
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo('App\Models\User', 'owner_id');
     }
 }

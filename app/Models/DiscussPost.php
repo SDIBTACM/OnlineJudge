@@ -16,15 +16,18 @@ class DiscussPost extends Model
 {
     use SoftDeletes;
 
-    public function topic() {
+    public function topic()
+    {
         return $this->belongsTo('App\Models\DiscussTopic', 'topic_id');
     }
 
-    public function context() {
+    public function context()
+    {
         return $this->hasOne('App\Models\DiscussPostContext', 'discuss_post_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('App\Models\User', 'owner_id');
     }
 }

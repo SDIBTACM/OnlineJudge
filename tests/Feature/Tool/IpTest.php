@@ -19,7 +19,8 @@ class IpTest extends TestCase
     /**
      * @dataProvider getIpv4Data
      */
-    public function testIsIpv4MatchSubnetsWithMask($matches, $remoteAddr, $cidr) {
+    public function testIsIpv4MatchSubnetsWithMask($matches, $remoteAddr, $cidr)
+    {
         if ($matches != $result = Ip::isIpInSubnets($remoteAddr, $cidr)) {
             print_r([$remoteAddr, $cidr]);
         }
@@ -48,7 +49,8 @@ class IpTest extends TestCase
     /**
      * @dataProvider getIpv6Data
      */
-    public function testIsIpv6MatchSubnetsWithMask($matches, $remoteAddr, $cidr) {
+    public function testIsIpv6MatchSubnetsWithMask($matches, $remoteAddr, $cidr)
+    {
         if ($matches != $result = Ip::isIpInSubnets($remoteAddr, $cidr)) {
             print_r([$remoteAddr, $cidr]);
         }

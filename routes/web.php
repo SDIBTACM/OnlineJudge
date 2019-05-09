@@ -27,7 +27,7 @@ Route::namespace('Auth')->group(function (){
 
     // Logout
     Route::get('logout', 'LoginController@logout')->name('logout');
-    Route::get('logout', 'LoginController@logout')->name('logout');
+    Route::post('logout', 'LoginController@logout')->name('logout');
 
     // Register
     Route::get('register', 'RegisterController@showRegistrationForm')->name('register');

@@ -19,7 +19,7 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'username' => $faker->unique()->name,
         'nickname' => $faker->name,
-        'password' => bcrypt('secret'), // password
+        'password' => bcrypt('password'), // password
         'school' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'role' => $faker->randomElement(['student', 'teacher', 'admin']),
@@ -33,4 +33,8 @@ $factory->state(User::class, 'admin', [
 
 $factory->state(User::class, 'teacher', [
     'role' => 'teacher'
+]);
+
+$factory->state(User::class, 'student', [
+    'role' => 'student'
 ]);

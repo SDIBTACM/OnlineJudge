@@ -13,15 +13,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContestProblem extends Model
 {
-    public function contest() {
+    public function contest()
+    {
         return $this->belongsTo('App\Models\Contest');
     }
 
-    public function result() {
+    public function result()
+    {
         return $this->hasMany('App\Models\ContestResult', 'contest_problem_id');
     }
 
-    public function problem() {
+    public function problem()
+    {
         return $this->belongsTo('App\Models\Problem');
     }
 }

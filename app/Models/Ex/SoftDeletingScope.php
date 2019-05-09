@@ -21,7 +21,8 @@ class SoftDeletingScope extends SoftDeletingScopeSource
      * @param \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
-    public function apply(Builder $builder, Model $model) {
+    public function apply(Builder $builder, Model $model)
+    {
         $builder->where($model->getQualifiedDeletedAtColumn(), '=', 0);
     }
 
@@ -31,7 +32,8 @@ class SoftDeletingScope extends SoftDeletingScopeSource
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return void
      */
-    public function extend(Builder $builder) {
+    public function extend(Builder $builder)
+    {
         foreach ($this->extensions as $extension) {
             $this->{"add{$extension}"}($builder);
         }
@@ -51,7 +53,8 @@ class SoftDeletingScope extends SoftDeletingScopeSource
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return void
      */
-    protected function addRestore(Builder $builder) {
+    protected function addRestore(Builder $builder)
+    {
         $builder->macro('restore', function (Builder $builder) {
             $builder->withTrashed();
 
@@ -68,7 +71,8 @@ class SoftDeletingScope extends SoftDeletingScopeSource
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return void
      */
-    protected function addWithoutTrashed(Builder $builder) {
+    protected function addWithoutTrashed(Builder $builder)
+    {
         $builder->macro('withoutTrashed', function (Builder $builder) {
             $model = $builder->getModel();
 
@@ -85,7 +89,8 @@ class SoftDeletingScope extends SoftDeletingScopeSource
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return void
      */
-    protected function addOnlyTrashed(Builder $builder) {
+    protected function addOnlyTrashed(Builder $builder)
+    {
         $builder->macro('onlyTrashed', function (Builder $builder) {
             $model = $builder->getModel();
 

@@ -19,7 +19,8 @@ trait SoftDeletes
      *
      * @return void
      */
-    public static function bootSoftDeletes() {
+    public static function bootSoftDeletes()
+    {
         static::addGlobalScope(new SoftDeletingScope);
     }
 
@@ -28,7 +29,8 @@ trait SoftDeletes
      *
      * @return bool|null
      */
-    public function restore() {
+    public function restore()
+    {
         // If the restoring event does not return false, we will proceed with this
         // restore operation. Otherwise, we bail out so the developer will stop
         // the restore totally. We will clear the deleted timestamp and save.
@@ -46,7 +48,7 @@ trait SoftDeletes
         $SQL_MODE = \DB::select("select @@sql_mode sql_mode")[0]->sql_mode;
         \DB::statement("set @@sql_mode = ''");
         $result = $this->save();
-        \DB::update('set @@sql_mode = ?' , ["$SQL_MODE"] );
+        \DB::update('set @@sql_mode = ?', ["$SQL_MODE"]);
 
         $this->fireModelEvent('restored', false);
 
@@ -58,8 +60,9 @@ trait SoftDeletes
      *
      * @return bool
      */
-    public function trashed() {
-        return ! ($this->{$this->getDeletedAtColumn()} === 0);
+    public function trashed()
+    {
+        return !($this->{$this->getDeletedAtColumn()} === 0);
     }
 
 }

@@ -18,8 +18,9 @@ class Ip
      * @param $subnets
      * @return bool
      */
-    static public function isIpInSubnets($ip, $subnets) {
-        if (! is_array($subnets)) {
+    static public function isIpInSubnets($ip, $subnets)
+    {
+        if (!is_array($subnets)) {
             return self::isIpInSubnet($ip, $subnets);
         }
 

@@ -17,7 +17,8 @@ class NoNeedToHaveController extends Controller
     /**
      * return 418 'HTTP/1.1 I'm a teapot'
      */
-    public function teapot() {
+    public function teapot()
+    {
         Log::info('Some one found the teapot');
         abort('418');
     }

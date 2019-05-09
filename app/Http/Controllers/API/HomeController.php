@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function user(Request $request) {
+    public function user(Request $request)
+    {
         return $request->user();
     }
 }

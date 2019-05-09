@@ -13,27 +13,33 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contest extends Model
 {
-    public function ipLimits() {
+    public function ipLimits()
+    {
         return $this->hasOne('App\Models\ContestIpLimit');
     }
 
-    public function register() {
+    public function register()
+    {
         return $this->hasMany('App\Models\ContestRegister');
     }
 
-    public function privileges() {
+    public function privileges()
+    {
         return $this->hasMany('App\Models\ContestPrivilege');
     }
 
-    public function problemList() {
+    public function problemList()
+    {
         return $this->hasMany('App\Models\ContestProblem')->orderBy('problem_order');
     }
 
-    public function result() {
+    public function result()
+    {
         return $this->hasMany('App\Models\ContestResult');
     }
 
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo('App\Models\User', 'owner_id');
     }
 }
