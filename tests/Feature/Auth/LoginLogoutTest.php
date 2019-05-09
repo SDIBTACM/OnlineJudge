@@ -30,8 +30,8 @@ class LoginLogoutTest extends TestCase
             'password' => 'password'
         ]);
 
-        print_r($response);
-        $response->assertRedirect('/');
+
+        $response->assertStatus(302)->assertRedirect('/');
         $this->assertAuthenticatedAs(AuthUser::find($user->id));
     }
 
