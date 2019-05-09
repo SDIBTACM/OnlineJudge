@@ -31,7 +31,7 @@ class LoginLogoutTest extends TestCase
         ]);
 
 
-        $response->assertStatus(302)->assertRedirect('/');
+
         $this->assertAuthenticatedAs(AuthUser::find($user->id));
     }
 
