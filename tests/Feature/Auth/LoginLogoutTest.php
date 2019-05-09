@@ -25,11 +25,13 @@ class LoginLogoutTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->from('/login')->post('/login', [
+        $response = $this->from('/login')->post('/login', [
             'identification' => $user->username,
             'password' => 'password'
-        ])->assertRedirect('/');
+        ]);
 
+        print_r($response);
+        $response->assertRedirect('/');
         $this->assertAuthenticatedAs(AuthUser::find($user->id));
     }
 
