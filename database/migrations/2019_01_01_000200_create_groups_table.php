@@ -26,14 +26,6 @@ class CreateGroupsTable extends Migration
             $table->unique(['name', 'deleted_at'], 'uq_name');
         });
 
-        DB::table('groups')->insert(
-            [
-                ['name' => 'admin'],
-                ['name' => 'teacher'],
-                ['name' => 'student'],
-            ]
-        );
-
         DB::update('set @@sql_mode = ?' , ["$SQL_MODE"] );
     }
 

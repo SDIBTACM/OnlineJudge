@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('school', 32)->default('');
             $table->string('email');
+            $table->string('role', 64)->default('student')->comment('student, teacher, admin');
             $table->timestamp('email_verified_at')->default(0);
             $table->tinyInteger('status')->default(0)
                 ->comment("-1: lock, 0: normal, 1: need verify by admin");

@@ -22,6 +22,7 @@ class CreateContestsTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->timestamp('deleted_at')->default(0);
             $table->unsignedInteger('owner_id');
+            $table->string('name')->default('');
             $table->dateTime('start_at');
             $table->dateTime('end_before');
             $table->unsignedTinyInteger('privilege')->default(0)
