@@ -56,7 +56,7 @@ class User extends Model
         return $this->hasMany('App\Models\LoginLog');
     }
 
-    public function group() {
+    public function groups() {
         return $this->belongsToMany('App\Models\Group', 'user_groups')->withTimestamps();
     }
 
