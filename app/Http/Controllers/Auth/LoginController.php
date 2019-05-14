@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Log;
+use App\Models\Option;
+use App\Units\Tools\Ip;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
@@ -66,15 +68,14 @@ class LoginController extends Controller
         // the IP address of the client making these requests into this application.
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
+            Log::warning('user: {} ip: {} login fail too much', $request->input($this->username()), $request->ips());
             return $this->sendLockoutResponse($request);
         }
 
-        if ($this->attemptLogin($request)) {
-            return $this->sendLoginResponse($request);
-        }
+        if ($this->attemptLogin($request) || $this->attemptLoginByOldPasswordEncryption($request)) {
+            $this->allowLoginFromIp($request);
+            // TODO: check user is login from different ip/pc.
 
-        if ($this->attemptLoginByOldPasswordEncryption($request)) {
             return $this->sendLoginResponse($request);
         }
 
@@ -133,9 +134,9 @@ class LoginController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $credentials = array_merge($credentials, ['username' => $request->input('identification')]);
+            $credentials = array_merge($credentials, ['username' => $request->input($this->username())]);
         } else {
-            $credentials = array_merge($credentials, ['email' => $request->input('identification')]);
+            $credentials = array_merge($credentials, ['email' => $request->input($this->username())]);
         }
 
         return $credentials;
@@ -163,9 +164,9 @@ class LoginController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $user = User::where('username', $request->input('identification'));
+            $user = User::where('username', $request->input($this->username()));
         } else {
-            $user = User::where('email', $request->input('identification'));
+            $user = User::where('email', $request->input($this->username()));
         }
 
         $user = $user->where('status', 0)->first();
@@ -201,10 +202,42 @@ class LoginController extends Controller
         $salt = substr($savedPasswordB64Decode, 20);
         $passwordB64Encode = base64_encode(sha1(md5($password) . $salt, true) . $salt);
 
-        if (strcmp($passwordB64Encode, $savedPassword) == 0)
+        if (strcmp($passwordB64Encode, $savedPassword) == 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
+
+    /**
+     * Check ip is allow to login
+     * @param Request $request
+     * @return bool|void
+     */
+    protected function allowLoginFromIp(Request $request) {
+        $denyVisitIps = json_decode(Option::getOption('deny_login_ips'), true);
+        $allowVisitIps = json_decode(Option::getOption('allow_login_ips'), true);
+
+        Log::debug('deny login ip limit count: {}', count($denyVisitIps));
+        Log::debug('allow login ip limit count: {}', count($allowVisitIps));
+
+
+        if (count($denyVisitIps) && Ip::isIpInSubnets($request->ip(), $denyVisitIps)) {
+            Log::warning('user mail/username: {}, try to login from: {}.', $request->input($this->username()), $request->ips());
+            return abort(403, 'Your ip not allow to login');
+        }
+
+        if (count($allowVisitIps) && (! Ip::isIpInSubnets($request->ip(), $allowVisitIps))) {
+            Log::warning('user mail/username: {}, try to login from: {}.', $request->input($this->username()), $request->ips());
+            return abort(403, 'Your ip not allow to login');
+        }
+
+        return true;
+    }
+
+    /**
+     * Check user is login twice from different client/browser
+     */
+
 
 }
