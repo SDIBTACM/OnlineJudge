@@ -29,10 +29,16 @@ class LoginLogoutTest extends TestCase
 
         $this->from('/login')->post('/login', [
             'identification' => $user->username,
+            'password' => 'error_password'
+        ])->assertRedirect('/login');
+
+        $this->from('/login')->post('/login', [
+            'identification' => $user->username,
             'password' => 'password'
         ])->assertRedirect('/');
 
         $this->assertAuthenticatedAs(AuthUser::find($user->id));
+        $this->assertDatabaseHas('login_logs', ['user_id' => $user->id]);
     }
 
     /**
@@ -46,10 +52,16 @@ class LoginLogoutTest extends TestCase
 
         $this->from('/login')->post('/login', [
             'identification' => $user->email,
+            'password' => 'error_password'
+        ])->assertRedirect('/login');
+
+        $this->from('/login')->post('/login', [
+            'identification' => $user->email,
             'password' => 'password'
         ])->assertRedirect('/');
 
         $this->assertAuthenticatedAs(AuthUser::find($user->id));
+        $this->assertDatabaseHas('login_logs', ['user_id' => $user->id]);
     }
 
     /**

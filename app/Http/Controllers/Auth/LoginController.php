@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Log;
+use App\Models\LoginLog;
 use App\Models\Option;
 use App\Units\Tools\Ip;
 use App\User;
@@ -72,13 +73,27 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        if ($this->attemptLogin($request) || $this->attemptLoginByOldPasswordEncryption($request)) {
-            $this->allowLoginFromIp($request);
-            // TODO: check user is login from different ip/pc.
+        $credentialRequest = $this->credentials($request);
+        $credentialRequestWithoutPassword = $credentialRequest;
+        unset($credentialRequestWithoutPassword['password']);
 
-            return $this->sendLoginResponse($request);
+        $user = User::where($credentialRequestWithoutPassword)->first();
+
+        if ( !is_null($user) ) {
+
+            if ($user->role != 'admin' && $user->role != 'teacher') {
+                $this->allowLoginFromIp($request);
+                $this->allowLoginFromDifferentIp($request->ip(), $user->id);
+            }
+
+            if ($this->attemptLogin($request, $credentialRequest) || $this->attemptLoginByOldPasswordEncryption($request, $credentialRequest)) {
+
+                $this->addLoginLog($request, $user->id);
+                Log::info('user: {} login success', $user->username);
+                return $this->sendLoginResponse($request);
+            }
+
         }
-
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
@@ -107,12 +122,13 @@ class LoginController extends Controller
      * Attempt to log the user into the application.
      *
      * @param Request $request
+     * @param Array $credentialRequest
      * @return bool
      */
-    protected function attemptLogin(Request $request)
+    protected function attemptLogin(Request $request, $credentialRequest)
     {
         return $this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
+            $credentialRequest, $request->filled('remember')
         );
     }
 
@@ -154,26 +170,20 @@ class LoginController extends Controller
      * Attempt to log the user into the application by old password encryption.
      *
      * @param Request $request
+     * @param Array $credentialRequest
      * @return bool
      */
-    protected function attemptLoginByOldPasswordEncryption(Request $request)
+    protected function attemptLoginByOldPasswordEncryption(Request $request, $credentialRequest)
     {
 
-        $validator = Validator::make($request->all(), [
-            $this->username() => 'mail',
-        ]);
+        $userInputPassword = $credentialRequest['password'];
+        unset($credentialRequest['password']);
 
-        if ($validator->fails()) {
-            $user = User::where('username', $request->input($this->username()));
-        } else {
-            $user = User::where('email', $request->input($this->username()));
-        }
+        $user = User::where($credentialRequest)->first();
 
-        $user = $user->where('status', 0)->first();
 
-        if (is_null($user)) return false;
 
-        if ($this->oldPasswordEncryptionCheck($request->input('password'), $user->password) === false) {
+        if ($this->oldPasswordEncryptionCheck($userInputPassword, $user->password) === false) {
             return false;
         }
 
@@ -215,29 +225,67 @@ class LoginController extends Controller
      * @return bool|void
      */
     protected function allowLoginFromIp(Request $request) {
+
         $denyVisitIps = json_decode(Option::getOption('deny_login_ips'), true);
         $allowVisitIps = json_decode(Option::getOption('allow_login_ips'), true);
 
         Log::debug('deny login ip limit count: {}', count($denyVisitIps));
         Log::debug('allow login ip limit count: {}', count($allowVisitIps));
 
-
         if (count($denyVisitIps) && Ip::isIpInSubnets($request->ip(), $denyVisitIps)) {
-            Log::warning('user mail/username: {}, try to login from: {}.', $request->input($this->username()), $request->ips());
-            return abort(403, 'Your ip not allow to login');
+            Log::info('user mail/username: {}, try to login from: {} but fail.', $request->input($this->username()), $request->ips());
+            abort(403, 'Your ip not allow to login');
         }
 
         if (count($allowVisitIps) && (! Ip::isIpInSubnets($request->ip(), $allowVisitIps))) {
-            Log::warning('user mail/username: {}, try to login from: {}.', $request->input($this->username()), $request->ips());
-            return abort(403, 'Your ip not allow to login');
+            Log::info('user mail/username: {}, try to login from: {} but fail.', $request->input($this->username()), $request->ips());
+            abort(403, 'Your ip not allow to login');
         }
 
-        return true;
     }
 
     /**
      * Check user is login twice from different client/browser
+     * @param $ip
+     * @param $userId
      */
 
+    protected function allowLoginFromDifferentIp($ip, $userId) {
+        $sysStatus = json_decode(Option::getOption('system_status'), true);
+
+        switch ($sysStatus['status']) {
+            case 0: {
+                break;
+            }
+            case 1: {
+                $sameUserLoginCount = LoginLog::where('ip', '<>', $ip)->where('created_at', '>', $sysStatus['start_time'])
+                    ->where('user_id', $userId)->count();
+                $sameIpLoginCount = LoginLog::where('ip', $ip)->where('created_at', '>', $sysStatus['start_time'])
+                    ->where('user_id', '<>' ,$userId)->count();
+                if ($sameIpLoginCount) {
+                    Log::info('user: {} login from {}, but the ip have been login by other user', User::find($userId)->pluck('username'), $ip);
+                    abort(403, 'Please do not login from other client.');
+                }
+                if ($sameUserLoginCount) {
+                    Log::info('user: {} login from {}, but the user have been login from other ip', User::find($userId)->pluck('username'), $ip);
+                    abort(403, 'Please do not login from other client.');
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * Add login log.
+     * @param Request $request
+     * @param $userId
+     */
+    protected function addLoginLog(Request $request, $userId) {
+        $loginLog = new LoginLog;
+
+        $loginLog->user_id = $userId;
+        $loginLog->ip = $request->ip();
+        $loginLog->save();
+    }
 
 }

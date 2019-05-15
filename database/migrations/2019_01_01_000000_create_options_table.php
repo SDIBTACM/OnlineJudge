@@ -31,31 +31,31 @@ class CreateOptionsTable extends Migration
             [
                 [
                     "key" => "system_status",
-                    "value" => "[0]",
+                    "value" => "{\"status\":0}",
                     "comment" => "0: normal, 1: in vip contest"
                 ],
 
                 [
                     "key" => "deny_login_ips",
-                    "value" => "{}",
+                    "value" => "[]",
                     "comment" => "the ip list that do not allow login"
                 ],
 
                 [
                     "key" => "allow_login_ips",
-                    "value" => "{}",
+                    "value" => "[]",
                     "comment" => "the ip list that which can login; if not empty, it will be checked first"
                 ],
 
                 [
                     "key" => "deny_visit_ips",
-                    "value" => "{}",
+                    "value" => "[]",
                     "comment" => "the ip list that do not allow view any page. You may deny yourself, be careful!"
                 ],
 
                 [
                     "key" => "allow_visit_ips",
-                    "value" => "{}",
+                    "value" => "[]",
                     "comment" => "the ip list that can view page; if not empty, " .
                         "it will be checked first; You may deny yourself, be careful!"
                 ],

@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class LoginLog extends Model
 {
+    public $timestamps = false;
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');
