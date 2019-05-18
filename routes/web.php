@@ -16,7 +16,7 @@
 //    return (new App\Mails\ResetPasswordMail($user, "test-token"));
 //});
 
-//normal
+// General
 Route::get('/', 'HomeController@index')->name('index');
 
 // Auth Route
@@ -47,12 +47,25 @@ Route::namespace('Auth')->group(function (){
         Route::get('verify/{id}', 'VerificationController@verify')->name('verification.verify');
         Route::get('resend', 'VerificationController@resend')->name('verification.resend');
     });
+});
+
+
+// App Route
+Route::namespace('App')->group(function () {
+    // User Route (user info, user
+    Route::namespace('User')->prefix('user')->group(function() {
+        Route::get('info/{user_id?}', 'UserInfoController@show')->name('user.info');
+
+        Route::get('password', 'ChangePasswordController@showFrom')->name('user.reset_password_from');
+        Route::post('password', 'ChangePasswordController@update')->name('user.reset_password');
+    });
 
 });
 
+
 // Teacher
 
-//Admin
+// Admin
 
 
 //Other
