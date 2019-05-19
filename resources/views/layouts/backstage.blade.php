@@ -17,10 +17,15 @@
                     @yield('content')
                 </main>
 
-                @include('layouts.component.footer')
             </div>
-
+            <script>
+                const app = new Vue({
+                    el: '#app'
+                });
+            </script>
+            @include('layouts.component.footer')
         </div>
 
     </body>
+    @yield('script')
 </html>

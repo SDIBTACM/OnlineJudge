@@ -19,7 +19,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
+    <script src="{{ asset(mix('js/app.js')) }}"></script>
     <link href="{{ asset(mix('css/app.css')) }}" rel="stylesheet">
     @yield('extra-head')
 </head>

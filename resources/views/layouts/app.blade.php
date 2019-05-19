@@ -10,6 +10,12 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        const app = new Vue({
+            el: '#app'
+        });
+    </script>
     @include('layouts.component.footer')
 </body>
+@yield('script')
 </html>
