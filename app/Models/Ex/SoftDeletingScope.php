@@ -23,7 +23,7 @@ class SoftDeletingScope extends SoftDeletingScopeSource
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where($model->getQualifiedDeletedAtColumn(), '=', 0);
+        $builder->where($model->getQualifiedDeletedAtColumn(), '=', 1);
     }
 
     /**
@@ -77,7 +77,7 @@ class SoftDeletingScope extends SoftDeletingScopeSource
             $model = $builder->getModel();
 
             $builder->withoutGlobalScope($this)
-                ->where($model->getQualifiedDeletedAtColumn(), 0);
+                ->where($model->getQualifiedDeletedAtColumn(), 1);
 
             return $builder;
         });
@@ -95,7 +95,7 @@ class SoftDeletingScope extends SoftDeletingScopeSource
             $model = $builder->getModel();
 
             $builder->withoutGlobalScope($this)
-                ->where($model->getQualifiedDeletedAtColumn(), '<>', 0);
+                ->where($model->getQualifiedDeletedAtColumn(), '<>', 1);
 
             return $builder;
         });

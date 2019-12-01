@@ -13,6 +13,6 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        define('CONTROLLER_START', microtime(true));
+        defined('CONTROLLER_START') or define('CONTROLLER_START', microtime(true));
     }
 }

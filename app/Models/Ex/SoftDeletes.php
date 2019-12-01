@@ -38,17 +38,17 @@ trait SoftDeletes
             return false;
         }
 
-        $this->{$this->getDeletedAtColumn()} = 0;
+        $this->{$this->getDeletedAtColumn()} = 1;
 
         // Once we have saved the model, we will fire the "restored" event so this
         // developer will do anything they need to after a restore operation is
         // totally finished. Then we will return the result of the save call.
         $this->exists = true;
 
-        $SQL_MODE = \DB::select("select @@sql_mode sql_mode")[0]->sql_mode;
-        \DB::statement("set @@sql_mode = ''");
+//        $SQL_MODE = \DB::select("select @@sql_mode sql_mode")[0]->sql_mode;
+//        \DB::statement("set @@sql_mode = ''");
         $result = $this->save();
-        \DB::update('set @@sql_mode = ?', ["$SQL_MODE"]);
+//        \DB::update('set @@sql_mode = ?', ["$SQL_MODE"]);
 
         $this->fireModelEvent('restored', false);
 

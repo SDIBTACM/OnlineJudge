@@ -54,10 +54,21 @@ Route::namespace('Auth')->group(function (){
 Route::namespace('App')->group(function () {
     // User Route (user info, user
     Route::namespace('User')->prefix('user')->group(function() {
-        Route::get('info/{user_id?}', 'UserInfoController@show')->name('user.info');
+        Route::get('info/{id?}', 'UserInfoController@show')->name('user.info');
+        Route::get('info/edit', 'UserInfoController@edit')->name('user.info.edit');
+        Route::post('info/edit', 'UserInfoController@edit')->name('user.info.edit');
 
         Route::get('password', 'ChangePasswordController@showFrom')->name('user.reset_password_from');
         Route::post('password', 'ChangePasswordController@update')->name('user.reset_password');
+    });
+
+    Route::prefix('mail')->middleware('auth')->group(function() {
+        Route::get('', 'MailController@list')->name('mail.list');
+        Route::get('count', 'MailController@count')->name('mail.count');
+        Route::get('new', 'MailController@add')->name('mail.new');
+        Route::get('reply/{mail_id}', 'MailController@reply')->name('mail.reply');
+        Route::post('send', 'MailController@send')->name('mail.send');
+        Route::get('{mail}', 'MailController@detail')->name('mail.detail');
     });
 
 });
@@ -67,7 +78,7 @@ Route::namespace('App')->group(function () {
 
 // Admin
 
-
 //Other
 Route::get('/teapot', 'NoNeedToHaveController@teapot')->name('teapot');
+Route::get('md', 'NoNeedToHaveController@md');
 
